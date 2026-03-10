@@ -324,7 +324,7 @@ class BKSync {
                     <span class="dashicons dashicons-info-outline" style="color:var(--bksync-primary); font-size: 24px;"></span>
                     <p><strong>Dica de Ouro:</strong> Use esta ferramenta no Site em Produção para extrair apenas as publicações e imagens de um mês específico. Isso evita derrubar seu banco de dados e cria lotes pequenos.</p>
                 </div>
-                <div class="bksync-form-group" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="bksync-form-group" style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
                     <div style="flex: 1; min-width: 200px;">
                         <label for="sync_start">📅 Data Inicial:</label>
                         <input type="date" id="sync_start" class="bksync-select" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>">
@@ -333,6 +333,25 @@ class BKSync {
                         <label for="sync_end">🏁 Data Final:</label>
                         <input type="date" id="sync_end" class="bksync-select" value="<?php echo date('Y-m-d'); ?>">
                     </div>
+                </div>
+
+                <div class="bksync-form-group">
+                    <label>🔍 O que deseja exportar?</label>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid var(--bksync-border);">
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: 500; margin-bottom: 0; cursor: pointer;">
+                            <input type="checkbox" class="sync_post_types" value="post" checked> 📝 Notícias (Posts)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: 500; margin-bottom: 0; cursor: pointer;">
+                            <input type="checkbox" class="sync_post_types" value="page"> 📄 Páginas e Modelos
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: 500; margin-bottom: 0; cursor: pointer;">
+                            <input type="checkbox" class="sync_post_types" value="vagas"> 💼 Vagas (Modelos)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-weight: 500; margin-bottom: 0; cursor: pointer;">
+                            <input type="checkbox" class="sync_post_types" value="attachment" checked> 📸 Mídias (Imagens)
+                        </label>
+                    </div>
+                    <p style="font-size: 12px; color: var(--bksync-text-muted); margin-top: 5px;">Selecione "Páginas" para levar seus novos modelos de layout do localhost para o online.</p>
                 </div>
 
                 <div style="margin-top: 30px;">
@@ -561,14 +580,25 @@ class BKSync {
                 btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Processando...');
                 status.text('Gerando pacote. Isso pode levar alguns minutos...');
 
+                var types = [];
+                $('.sync_post_types:checked').each(function() {
+                    types.push($(this).val());
+                });
+
+                if (types.length === 0) {
+                    alert('Selecione pelo menos um tipo de conteúdo para exportar.');
+                    return;
+                }
+
                 $.ajax({
                     url: ajaxurl,
                     type: 'POST',
                     data: {
                         action: 'bksync_export_data',
                         nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>',
-                        start_date: start,
-                        end_date: end,
+                        start_date: $('#sync_start').val(),
+                        end_date: $('#sync_end').val(),
+                        post_types: types,
                         months_label: monthsLabel
                     },
                     success: function(res) {
@@ -895,6 +925,7 @@ function bksync_handle_export_ajax() {
 
     $start_date = isset($_POST['start_date']) ? sanitize_text_field($_POST['start_date']) : '';
     $end_date   = isset($_POST['end_date'])   ? sanitize_text_field($_POST['end_date'])   : '';
+    $post_types = isset($_POST['post_types']) ? (array)$_POST['post_types'] : array('post', 'attachment');
 
     if (empty($start_date) || empty($end_date)) {
         wp_send_json_error('Datas inválidas.');
@@ -906,8 +937,8 @@ function bksync_handle_export_ajax() {
 
     // 1. Buscar Posts e Anexos no intervalo
     $args = array(
-        'post_type'      => array('post', 'attachment'),
-        'post_status'    => array('publish', 'inherit'),
+        'post_type'      => $post_types,
+        'post_status'    => array('publish', 'inherit', 'private'),
         'posts_per_page' => -1,
         'date_query'     => array(
             array(
@@ -938,6 +969,7 @@ function bksync_handle_export_ajax() {
                 'post_name'     => $p->post_name,
                 'post_date'     => $p->post_date,
                 'post_author'   => $p->post_author,
+                'post_parent'   => $p->post_parent,
                 'meta'          => get_post_meta($p->ID)
             );
 
@@ -1293,7 +1325,8 @@ function bksync_handle_import_chunk_ajax() {
                 'post_title' => $p['post_title'], 'post_content' => $p['post_content'],
                 'post_excerpt' => $p['post_excerpt'], 'post_status'  => $p['post_status'],
                 'post_type' => $p['post_type'], 'post_name' => $p['post_name'],
-                'post_date' => $p['post_date'], 'post_author' => get_current_user_id()
+                'post_date' => $p['post_date'], 'post_author' => get_current_user_id(),
+                'post_parent' => isset($p['post_parent']) ? $p['post_parent'] : 0
             );
             $new_post_id = wp_insert_post( $post_info );
             if ( ! is_wp_error( $new_post_id ) ) {
