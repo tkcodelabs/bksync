@@ -41,132 +41,266 @@ class BKSync {
         $logo_url = plugin_dir_url(__FILE__) . 'assets/BKSync.jpg';
         ?>
         <style>
-            /* Branding: Teal (#136B72), Emerald (#1F9A9C), Gold (#F0A528) */
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+            /* Modern Design System by llcont/antigravity */
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
             
+            :root {
+                --bksync-primary: #1F9A9C;
+                --bksync-primary-hover: #167a7c;
+                --bksync-secondary: #136B72;
+                --bksync-accent: #F0A528;
+                --bksync-accent-hover: #e0941f;
+                --bksync-bg: #f8fafc;
+                --bksync-card: #ffffff;
+                --bksync-text-main: #1e293b;
+                --bksync-text-muted: #64748b;
+                --bksync-border: #e2e8f0;
+                --bksync-danger-bg: #fef2f2;
+                --bksync-danger-text: #b91c1c;
+                --bksync-warning-bg: #fffbeb;
+                --bksync-warning-text: #b45309;
+                --bksync-radius-lg: 16px;
+                --bksync-radius-md: 10px;
+                --bksync-radius-sm: 6px;
+                --bksync-shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+                --bksync-shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+
             .bksync-wrap {
-                font-family: 'Inter', sans-serif;
+                font-family: 'Inter', system-ui, -apple-system, sans-serif;
                 max-width: 900px;
-                margin: 30px auto;
-                color: #2d3748;
+                margin: 40px auto;
+                color: var(--bksync-text-main);
+                background-color: var(--bksync-bg);
+                padding: 40px;
+                border-radius: var(--bksync-radius-lg);
+                box-shadow: var(--bksync-shadow-soft);
             }
             .bksync-header {
                 text-align: center;
-                margin-bottom: 30px;
+                margin-bottom: 40px;
             }
             .bksync-header img {
-                max-width: 180px;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                max-width: 140px;
+                border-radius: var(--bksync-radius-md);
+                box-shadow: var(--bksync-shadow-soft);
                 margin-bottom: 20px;
+                transition: transform 0.3s ease;
+            }
+            .bksync-header img:hover {
+                transform: scale(1.05) rotate(2deg);
             }
             .bksync-header h1 {
-                color: #136B72;
+                color: var(--bksync-text-main);
                 font-size: 32px;
                 font-weight: 800;
+                letter-spacing: -0.02em;
                 margin: 0 0 10px 0;
             }
             .bksync-header p {
-                color: #718096;
+                color: var(--bksync-text-muted);
                 font-size: 16px;
+                line-height: 1.5;
+                font-weight: 500;
                 max-width: 600px;
                 margin: 0 auto;
             }
+            
+            /* Tabs Navigation */
             .bksync-nav {
                 display: flex;
-                gap: 15px;
-                margin-bottom: 25px;
+                gap: 12px;
+                margin-bottom: 30px;
                 justify-content: center;
+                background: #f1f5f9;
+                padding: 6px;
+                border-radius: 9999px;
+                max-width: max-content;
+                margin-left: auto;
+                margin-right: auto;
             }
             .bksync-nav-item {
-                padding: 12px 25px;
-                background: #edf2f7;
-                color: #4a5568;
-                border-radius: 8px;
+                padding: 10px 24px;
+                color: var(--bksync-text-muted);
+                border-radius: 9999px;
                 cursor: pointer;
                 font-weight: 600;
-                transition: all 0.3s;
-                border: 2px solid transparent;
+                font-size: 14px;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
             .bksync-nav-item:hover {
-                background: #e2e8f0;
+                color: var(--bksync-text-main);
             }
             .bksync-nav-item.active {
-                background: #136B72;
-                color: #fff;
-                box-shadow: 0 4px 10px rgba(19, 107, 114, 0.3);
+                background: var(--bksync-card);
+                color: var(--bksync-primary);
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             }
+            
+            /* Cards & Content */
             .bksync-card {
-                background: #fff;
-                padding: 30px;
-                border-radius: 12px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+                background: var(--bksync-card);
+                padding: 35px;
+                border-radius: var(--bksync-radius-lg);
+                border: 1px solid var(--bksync-border);
+                box-shadow: var(--bksync-shadow-heavy);
                 display: none;
             }
             .bksync-card.active {
                 display: block;
-                animation: fadeIn 0.4s ease;
+                animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(5px); }
-                to { opacity: 1; transform: translateY(0); }
+            @keyframes scaleIn {
+                from { opacity: 0; transform: scale(0.98) translateY(10px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
             }
             .bksync-card h2 {
-                color: #1F9A9C;
-                font-size: 24px;
+                color: var(--bksync-text-main);
+                font-size: 20px;
+                font-weight: 700;
                 margin-top: 0;
-                border-bottom: 2px solid #edf2f7;
+                border-bottom: 1px solid var(--bksync-border);
                 padding-bottom: 15px;
+                margin-bottom: 25px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
             }
+            
+            /* Forms & Inputs */
             .bksync-form-group {
-                margin-bottom: 20px;
+                margin-bottom: 24px;
             }
             .bksync-form-group label {
                 display: block;
                 font-weight: 600;
                 margin-bottom: 8px;
-                color: #4a5568;
+                color: var(--bksync-text-main);
+                font-size: 14px;
             }
-            .bksync-select {
+            .bksync-select, .bksync-input-file {
                 width: 100%;
-                max-width: 300px;
-                padding: 12px;
-                border-radius: 8px;
-                border: 1px solid #cbd5e0;
-                font-size: 16px;
+                padding: 12px 16px;
+                border-radius: var(--bksync-radius-md);
+                border: 1px solid var(--bksync-border);
+                font-size: 15px;
+                font-family: inherit;
+                color: var(--bksync-text-main);
+                background: #f8fafc;
+                transition: all 0.2s;
             }
+            .bksync-select:focus, .bksync-input-file:focus {
+                outline: none;
+                border-color: var(--bksync-primary);
+                box-shadow: 0 0 0 3px rgba(31, 154, 156, 0.15);
+                background: #fff;
+            }
+            
+            /* Buttons */
             .bksync-btn {
-                background: linear-gradient(135deg, #F0A528, #e69619);
+                background: var(--bksync-primary);
                 color: white;
                 border: none;
-                padding: 14px 28px;
-                font-size: 16px;
-                font-weight: 800;
-                border-radius: 8px;
+                padding: 12px 24px;
+                font-size: 15px;
+                font-weight: 600;
+                border-radius: var(--bksync-radius-md);
                 cursor: pointer;
-                transition: all 0.3s;
-                box-shadow: 0 4px 15px rgba(240, 165, 40, 0.4);
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                 display: inline-flex;
                 align-items: center;
+                justify-content: center;
                 gap: 8px;
-                text-decoration: none;
+                box-shadow: 0 4px 6px -1px rgba(31, 154, 156, 0.2);
+                font-family: inherit;
             }
-            .bksync-btn:hover {
+            .bksync-btn:hover:not(:disabled) {
                 transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(240, 165, 40, 0.5);
+                box-shadow: 0 10px 15px -3px rgba(31, 154, 156, 0.3);
+                background: var(--bksync-primary-hover);
                 color: white;
             }
+            .bksync-btn:active:not(:disabled) {
+                transform: translateY(0);
+            }
+            .bksync-btn:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+            
+            .bksync-btn-accent {
+                background: var(--bksync-accent);
+                box-shadow: 0 4px 6px -1px rgba(240, 165, 40, 0.3);
+            }
+            .bksync-btn-accent:hover:not(:disabled) {
+                background: var(--bksync-accent-hover);
+                box-shadow: 0 10px 15px -3px rgba(240, 165, 40, 0.4);
+            }
+            
+            .bksync-btn-dark {
+                background: #334155;
+                box-shadow: 0 4px 6px -1px rgba(51, 65, 85, 0.3);
+            }
+            .bksync-btn-dark:hover:not(:disabled) {
+                background: #1e293b;
+                box-shadow: 0 10px 15px -3px rgba(51, 65, 85, 0.4);
+            }
+
+            /* Notices / Badges */
             .bksync-notice {
+                background: var(--bksync-warning-bg);
+                border: 1px solid #fde68a;
+                border-left: 4px solid var(--bksync-accent);
+                padding: 16px;
+                border-radius: var(--bksync-radius-md);
+                margin-bottom: 24px;
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            .bksync-notice.info {
                 background: #f0fdfa;
-                border-left: 4px solid #1F9A9C;
-                padding: 15px;
-                border-radius: 0 8px 8px 0;
-                margin-bottom: 25px;
+                border-color: #ccfbf1;
+                border-left-color: var(--bksync-primary);
+            }
+            .bksync-notice.danger {
+                background: var(--bksync-danger-bg);
+                border-color: #fecaca;
+                border-left-color: var(--bksync-danger-text);
             }
             .bksync-notice p {
                 margin: 0;
-                color: #0f766e;
+                color: var(--bksync-text-main);
                 font-size: 14px;
+                line-height: 1.5;
+            }
+            
+            /* Drag and Drop area for upload simulating */
+            .bksync-upload-area {
+                border: 2px dashed var(--bksync-border);
+                border-radius: var(--bksync-radius-lg);
+                padding: 40px 20px;
+                text-align: center;
+                background: #f8fafc;
+                transition: all 0.3s;
+                cursor: pointer;
+            }
+            .bksync-upload-area:hover {
+                border-color: var(--bksync-primary);
+                background: #f0fdfa;
+            }
+            .bksync-upload-area input[type="file"] {
+                display: none;
+            }
+            .bksync-upload-icon {
+                font-size: 48px;
+                color: var(--bksync-primary);
+                width: auto;
+                height: 48px;
+                margin-bottom: 10px;
             }
         </style>
 
@@ -174,37 +308,53 @@ class BKSync {
             <div class="bksync-header">
                 <img src="<?php echo esc_url($logo_url); ?>" alt="BKSync Logo">
                 <h1>BKSync</h1>
-                <p>Transferência Seletiva e Sincronizada entre seus ambientes Gerenciais e de Produção.</p>
+                <p>Transferência Seletiva e Sincronizada entre seus ambientes Gerenciais e de Produção. Mais Rápido, Menos Servidor.</p>
             </div>
 
             <nav class="bksync-nav">
-                <div class="bksync-nav-item active" data-tab="export">📦 Exportar Sincronização</div>
-                <div class="bksync-nav-item" data-tab="import">☁️ Importar Sincronização</div>
+                <div class="bksync-nav-item active" data-tab="export"><span class="dashicons dashicons-database"></span> Exportar Sincronização</div>
+                <div class="bksync-nav-item" data-tab="import"><span class="dashicons dashicons-cloud-saved"></span> Importar Sincronização</div>
+                <div class="bksync-nav-item" data-tab="tools"><span class="dashicons dashicons-admin-tools"></span> Ferramentas</div>
             </nav>
 
             <!-- ABA 1: EXPORTAR -->
             <div id="tab-export" class="bksync-card active">
                 <h2>Gerar Pacote de Sincronização (Export)</h2>
-                <div class="bksync-notice">
-                    <p><strong>Dica de Ouro:</strong> Use esta ferramenta no Site Online para extrair apenas as publicações e imagens de um mês específico. Isso evita baixar o banco de dados inteiro!</p>
+                <div class="bksync-notice info">
+                    <span class="dashicons dashicons-info-outline" style="color:var(--bksync-primary); font-size: 24px;"></span>
+                    <p><strong>Dica de Ouro:</strong> Use esta ferramenta no Site em Produção para extrair apenas as publicações e imagens de um mês específico. Isso evita derrubar seu banco de dados e cria lotes pequenos.</p>
                 </div>
-
-                <div class="bksync-form-group" style="display: flex; gap: 20px;">
-                    <div style="flex: 1;">
+                <div class="bksync-form-group" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
                         <label for="sync_start">📅 Data Inicial:</label>
                         <input type="date" id="sync_start" class="bksync-select" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>">
                     </div>
-                    <div style="flex: 1;">
+                    <div style="flex: 1; min-width: 200px;">
                         <label for="sync_end">🏁 Data Final:</label>
                         <input type="date" id="sync_end" class="bksync-select" value="<?php echo date('Y-m-d'); ?>">
                     </div>
                 </div>
 
                 <div style="margin-top: 30px;">
-                    <button type="button" id="btn-run-export" class="bksync-btn">
-                        <span class="dashicons dashicons-download"></span> Gerar Pacote BKSync
+                    <input type="hidden" id="sync_months_label" value="">
+                    
+                    <button type="button" id="btn-smart-chunks" class="bksync-btn">
+                        <span class="dashicons dashicons-lightbulb"></span> Sugerir Lotes Relevantes
                     </button>
-                    <span id="export-status" style="margin-left: 15px; font-weight: 600; color: #1F9A9C;"></span>
+                </div>
+
+                <!-- Área Dinâmica dos Lotes (Smart Chunks) -->
+                <div id="bksync-chunks-container" style="margin-top: 25px; display: none; background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px dashed var(--bksync-border);">
+                    <h3 style="margin-top:0; font-size:16px; color:var(--bksync-text-main); display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-archive"></span> Lotes Disponíveis no Banco</h3>
+                    <p style="font-size:14px; color:var(--bksync-text-muted); margin-bottom:20px;">Dica: Você pode selecionar <b>múltiplos meses</b> de uma vez. As datas serão ajustadas automaticamente para cobrir todo o período escolhido na tela a cima.</p>
+                    <div id="chunks-grid" style="display:flex; flex-wrap:wrap; gap:12px;"></div>
+                </div>
+
+                <div style="margin-top: 40px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <button type="button" id="btn-run-export" class="bksync-btn bksync-btn-accent" style="padding: 14px 30px; font-size: 16px;">
+                        <span class="dashicons dashicons-download"></span> Gerar Arquivo de Exportação
+                    </button>
+                    <span id="export-status" style="font-weight: 600; color: var(--bksync-primary);"></span>
                 </div>
             </div>
 
@@ -213,37 +363,66 @@ class BKSync {
                 <h2>Instalar Pacote de Sincronização (Import)</h2>
                 
                 <!-- IMPORT NORMAL -->
-                <div class="bksync-notice" style="background:#fffaf0; border-color:#F0A528;">
-                    <p style="color:#b7791f;"><strong>Atenção:</strong> O sistema injetará silenciosamente apenas as postagens ausentes, preservando suas demais configurações.</p>
+                <div class="bksync-notice">
+                    <span class="dashicons dashicons-warning" style="color:var(--bksync-accent); font-size: 24px;"></span>
+                    <p><strong>Atenção:</strong> O sistema injetará silenciosamente apenas as postagens ausentes, preservando as suas demais configurações de CMS intactas.</p>
                 </div>
                 
                 <div class="bksync-form-group">
-                    <label for="sync_file">Opção 1: Envio Tradicional (Até ~50MB):</label>
-                    <input type="file" id="sync_file" accept=".zip" style="padding:15px; border:2px dashed #cbd5e0; width:100%; border-radius:8px; background:#f8fafc; cursor:pointer;">
+                    <label for="sync_file" style="margin-bottom:15px;">Opção 1: Envio Tradicional via Navegador (Para Zips de até ~50MB)</label>
+                    <div class="bksync-upload-area" onclick="document.getElementById('sync_file').click()">
+                        <span class="dashicons dashicons-cloud-upload bksync-upload-icon"></span>
+                        <h3 style="margin: 0 0 10px 0; color: var(--bksync-text-main);">Clique para Selecionar o Arquivo .ZIP</h3>
+                        <p style="margin: 0; color: var(--bksync-text-muted); font-size:14px;">Ou procure no seu gerenciador de arquivos</p>
+                        <input type="file" id="sync_file" accept=".zip">
+                        <p id="file-name-display" style="margin-top: 15px; font-weight: 600; color: var(--bksync-primary);"></p>
+                    </div>
                 </div>
                 
-                <div style="margin-top: 15px; margin-bottom: 30px;">
-                    <button type="button" id="btn-run-import" class="bksync-btn" style="background: #136B72; box-shadow: 0 4px 15px rgba(19, 107, 114, 0.4);">
-                        <span class="dashicons dashicons-upload"></span> Injetar Arquivo
+                <div style="margin-top: 25px; margin-bottom: 40px; display: flex; align-items: center;">
+                    <button type="button" id="btn-run-import" class="bksync-btn bksync-btn-dark" style="padding: 14px 30px; font-size: 16px;">
+                        <span class="dashicons dashicons-upload"></span> Injetar Arquivo BKSync
                     </button>
-                    <span id="import-status" style="margin-left: 15px; font-weight: 600; color: #136B72;"></span>
+                    <span id="import-status" style="margin-left: 20px; font-weight: 600; color: var(--bksync-primary);"></span>
                 </div>
                 
-                <hr style="border: 0; border-top: 1px solid #edf2f7; margin: 30px 0;">
+                <hr style="border: 0; border-top: 1px dashed var(--bksync-border); margin: 40px 0;">
                 
                 <!-- BYPASS LOCAL -->
-                <div style="background: #f8fafc; padding: 25px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <h3 style="margin-top:0; color:#4a5568;"><span class="dashicons dashicons-shield"></span> Opção 2: Bypass Anti-Limites (Arquivos Gigantes)</h3>
-                    <p style="color:#718096; font-size: 14px; margin-bottom: 20px;">
-                        Seu arquivo `.zip` é muito grande e o servidor acusou erro "400 Bad Request"? Use a via expressa local:<br>
-                        1. Vá no painel do seu servidor e abra a pasta: <code>wp-content/plugins/bksync/import/</code><br>
-                        2. Jogue (faça upload) do seu arquivo .zip lá dentro.<br>
-                        3. Clique no botão mágico abaixo para processá-lo na velocidade do disco rígido.
+                <div style="background: #f1f5f9; padding: 30px; border-radius: var(--bksync-radius-lg); border: 1px solid var(--bksync-border);">
+                    <h3 style="margin-top:0; color:var(--bksync-text-main); display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-shield"></span> Opção 2: Server Bypass (Arquivos Gigantes)</h3>
+                    <p style="color:var(--bksync-text-muted); font-size: 14.5px; margin-bottom: 25px; line-height: 1.6;">
+                        Seu arquivo `.zip` é muito grande e o seu navegador acusou erro "400 Bad Request"? Use a via expressa local:<br><br>
+                        1. Vá no painel CPanel/FTP do seu servidor e abra a pasta: <code>wp-content/plugins/bksync/import/</code><br>
+                        2. Jogue (faça upload) do seu arquivo .zip gigante lá dentro.<br>
+                        3. Volte aqui e clique no botão mágico abaixo para processá-lo na velocidade do disco rígido local, sem timeout.
                     </p>
-                    <button type="button" id="btn-run-local-import" class="bksync-btn" style="background: #2d3748; padding: 10px 20px; font-size: 14px;">
-                        <span class="dashicons dashicons-update"></span> Scan da Pasta e Injetar
+                    <button type="button" id="btn-run-local-import" class="bksync-btn bksync-btn-accent">
+                        <span class="dashicons dashicons-update"></span> Escanear Servidor & Injetar
                     </button>
-                    <span id="local-import-status" style="margin-left: 15px; font-weight: 600; color: #2d3748;"></span>
+                    <span id="local-import-status" style="margin-top: 15px; font-weight: 600; color: var(--bksync-danger-text); display: block;"></span>
+                </div>
+            </div>
+        </div> <!-- END TAB IMPORT -->
+            
+            <!-- ABA 3: FERRAMENTAS -->
+            <div id="tab-tools" class="bksync-card">
+                <h2>Ferramentas de Manutenção BKSync</h2>
+                
+                <div style="background: #f1f5f9; padding: 30px; border-radius: var(--bksync-radius-lg); border: 1px solid var(--bksync-border);">
+                    <h3 style="margin-top:0; color:var(--bksync-text-main); display:flex; align-items:center; gap:8px;"><span class="dashicons dashicons-admin-generic"></span> Curar Mídias Quebradas (Quadrados Brancos)</h3>
+                    <p style="color:var(--bksync-text-muted); font-size: 14.5px; margin-bottom: 25px; line-height: 1.6;">
+                        Se a sua importação anterior sofreu Timeout e deixou fotos aparecendo em branco na Biblioteca, utilize esta ferramenta para escanear seu Banco de Dados e forçar a criação destas miniaturas para todas elas em lotes totalmente controlados.
+                    </p>
+                    <button type="button" id="btn-run-healer" class="bksync-btn bksync-btn-accent">
+                        <span class="dashicons dashicons-heart"></span> Curar Biblioteca de Mídia
+                    </button>
+                    <div id="healer-status-container" style="margin-top: 15px; display: none;">
+                        <span id="healer-status-text" style="font-weight: 600; color: var(--bksync-primary); display: block; margin-bottom: 5px;">Procurando mídias corrompidas...</span>
+                        <div style="width:100%; height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">
+                            <div id="healer-progress-bar" style="width:0%; height:100%; background:#136B72; transition:width 0.3s;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -258,10 +437,114 @@ class BKSync {
                 $('#tab-' + target).addClass('active');
             });
             
+            // File Upload Display
+            $('#sync_file').on('change', function(e) {
+                var fileName = e.target.files[0] ? e.target.files[0].name : '';
+                if(fileName) {
+                    $('#file-name-display').hide().html('<span class="dashicons dashicons-media-archive"></span> Arquivo Anexado: ' + fileName).fadeIn();
+                } else {
+                    $('#file-name-display').html('');
+                }
+            });
+            
+            // --- INICIO SMART CHUNKS LOGIC ---
+            var selectedChunks = []; // Array para guardar 'YYYY-MM' selecionados
+
+            $('#btn-smart-chunks').on('click', function() {
+                var btn = $(this);
+                var container = $('#bksync-chunks-container');
+                var grid = $('#chunks-grid');
+
+                btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Analisando...');
+                selectedChunks = []; // Reseta na nova busca
+
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: { action: 'bksync_analyze_chunks_ajax', nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>' },
+                    success: function(res) {
+                        btn.prop('disabled', false).html('<span class="dashicons dashicons-lightbulb"></span> Sugerir Lotes Otimizados');
+                        if(res.success && res.data.length > 0) {
+                            container.slideDown();
+                            grid.empty();
+                            
+                            $.each(res.data, function(i, chunk) {
+                                // chunk = { year_month: "2026-03", count: 150, label: "Março 2026", first_day: "2026-03-01", last_day: "2026-03-31" }
+                                var btnChunk = $('<button>')
+                                    .addClass('chunk-pill')
+                                    .css({
+                                        'padding':'8px 15px', 'border':'1px solid #cbd5e0', 'background':'#fff', 
+                                        'border-radius':'20px', 'cursor':'pointer', 'color':'#4a5568', 'font-weight':'600',
+                                        'transition':'all 0.2s'
+                                    })
+                                    .html(chunk.label + ' <span style="font-weight:normal; font-size:12px; opacity:0.8;">(' + chunk.count + ' itens)</span>')
+                                    .data('ym', chunk.year_month)
+                                    .data('first', chunk.first_day)
+                                    .data('last', chunk.last_day);
+
+                                btnChunk.on('click', function() {
+                                    var ym = $(this).data('ym');
+                                    var idx = selectedChunks.indexOf(ym);
+
+                                    if (idx > -1) {
+                                        selectedChunks.splice(idx, 1); // Desmarca
+                                        $(this).css({'background':'#fff', 'color':'#4a5568', 'border-color':'#cbd5e0'});
+                                    } else {
+                                        selectedChunks.push(ym); // Marca
+                                        $(this).css({'background':'#F0A528', 'color':'#fff', 'border-color':'#d97706'});
+                                    }
+
+                                    recalculateDateRange();
+                                });
+
+                                grid.append(btnChunk);
+                            });
+                        } else {
+                            alert("Nenhuma postagem ou mídia encontrada para gerar lotes.");
+                        }
+                    },
+                    error: function() {
+                        alert("Falha ao ler o banco de dados. Tente novamente.");
+                        btn.prop('disabled', false).html('<span class="dashicons dashicons-lightbulb"></span> Sugerir Lotes Otimizados');
+                    }
+                });
+            });
+
+            function recalculateDateRange() {
+                if (selectedChunks.length === 0) return; // Se vazio, não mexe nas datas
+
+                var minDateStr = "9999-12-31";
+                var maxDateStr = "0000-01-01";
+                var labels = [];
+
+                $('.chunk-pill').each(function() {
+                    var ym = $(this).data('ym');
+                    if (selectedChunks.indexOf(ym) > -1) {
+                        var first = $(this).data('first');
+                        var last = $(this).data('last');
+                        if (first < minDateStr) minDateStr = first;
+                        if (last > maxDateStr) maxDateStr = last;
+                        // Pegar nome do mês sem contagem, ex: 'Março 2026' -> 'Março_2026'
+                        labels.push($(this).text().split('(')[0].trim().replace(/\s+/g, '_'));
+                    }
+                });
+
+                // Preenche os Inputs maravilhosamente
+                $('#sync_start').val(minDateStr);
+                $('#sync_end').val(maxDateStr);
+                $('#sync_months_label').val(labels.join('-'));
+                
+                // Pisca a corzinha pra dar feedback visual
+                $('#sync_start, #sync_end').css('box-shadow', '0 0 10px #F0A528');
+                setTimeout(function(){ $('#sync_start, #sync_end').css('box-shadow', 'none'); }, 1000);
+            }
+            // --- FIM SMART CHUNKS LOGIC ---
+
             // Lógica de Exportação
             $('#btn-run-export').on('click', function() {
                 var start = $('#sync_start').val();
                 var end = $('#sync_end').val();
+                var monthsLabel = $('#sync_months_label').val();
                 var btn = $(this);
                 var status = $('#export-status');
 
@@ -285,12 +568,13 @@ class BKSync {
                         action: 'bksync_export_data',
                         nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>',
                         start_date: start,
-                        end_date: end
+                        end_date: end,
+                        months_label: monthsLabel
                     },
                     success: function(res) {
                         if (res.success) {
                             status.html('✅ <strong>Sucesso!</strong> <a href="' + res.data.file_url + '" target="_blank" download style="color:#1F9A9C; text-decoration:underline;">Clique aqui para baixar o ' + res.data.file_name + '</a>');
-                            btn.html('<span class="dashicons dashicons-download"></span> Gerar Pacote BKSync');
+                            btn.prop('disabled', false).html('<span class="dashicons dashicons-download"></span> Gerar Pacote BKSync');
                         } else {
                             status.html('❌ Erro: ' + res.data);
                             btn.prop('disabled', false).html('<span class="dashicons dashicons-download"></span> Tentar Novamente');
@@ -303,7 +587,105 @@ class BKSync {
                 });
             });
 
-            // Lógica de Importação
+            // --- INICIO IMPORTAÇÃO COM PROGRESSO REALTIME ---
+            var importSessionId = '';
+            var importTotalMedia = 0;
+            var importTotalPosts = 0;
+            var importTotalFiles = 0;
+
+            // FASE 2: Descompactação em Background (Para zips pesados não trancarem a tela)
+            function processExtractChunk(btn, status) {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'bksync_extract_chunk_ajax',
+                        nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>',
+                        session_id: importSessionId
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            if (res.data.status === 'processing') {
+                                var prc = res.data.processed;
+                                var percent = importTotalFiles > 0 ? Math.round((prc / importTotalFiles) * 100) : 100;
+                                
+                                var progBar = '<div style="margin-top:15px; width:100%; height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">' + 
+                                              '<div style="width:'+percent+'%; height:100%; background:#2b6cb0; transition:width 0.3s;"></div></div>';
+                                              
+                                status.html('<span style="color:#2b6cb0; display:block; margin-bottom:5px;">📦 Descompactando arquivos originais... ' + percent + '% concluído.</span>' +
+                                            '<span style="font-size:12px; color:#718096">Extraídos: ' + prc + ' de ' + importTotalFiles + ' imagens/arquivos contidos no ZIP</span>' + progBar);
+                                            
+                                processExtractChunk(btn, status);
+                            } else if (res.data.status === 'completed') {
+                                // Foi pro disco! Vai para fase DB.
+                                status.html('<span style="color:#2d3748">✅ Extração Limpa Concluída! Conectando ao Banco de Dados...</span>');
+                                processImportChunk(btn, status);
+                            }
+                        } else {
+                            status.html('❌ Erro na extração do HD: ' + res.data);
+                            btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> Tentar Novamente');
+                        }
+                    },
+                    error: function() {
+                        status.html('❌ Timeout/Erro durante descompactação do ZIP.');
+                        btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> Tentar Novamente');
+                    }
+                });
+            }
+
+            // FASE 3: Injeção no Banco de Dados
+            function processImportChunk(btn, status) {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'bksync_import_chunk_ajax',
+                        nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>',
+                        session_id: importSessionId
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            if (res.data.status === 'processing') {
+                                var procMed = res.data.processed_media;
+                                var procPos = res.data.processed_posts;
+                                
+                                // Render ProgressBar
+                                var total = importTotalMedia + importTotalPosts;
+                                var curr = procMed + procPos;
+                                var percent = total > 0 ? Math.round((curr / total) * 100) : 100;
+
+                                var progBar = '<div style="margin-top:15px; width:100%; height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;">' + 
+                                              '<div style="width:'+percent+'%; height:100%; background:#136B72; transition:width 0.3s;"></div></div>';
+                                
+                                status.html('<span style="color:#F0A528; display:block; margin-bottom:5px;">🚀 Injetando na Biblioteca... ' + percent + '% concluído. Não feche a aba!</span>' +
+                                            '<span style="font-size:12px; color:#718096">📸 Mídias: ' + procMed + ' de ' + importTotalMedia + ' &nbsp;|&nbsp; 📝 Posts: ' + procPos + ' de ' + importTotalPosts + '</span>' + 
+                                            progBar);
+                                
+                                // Chama o próximo lote!
+                                processImportChunk(btn, status);
+
+                            } else if (res.data.status === 'completed') {
+                                status.html('✅ <strong style="color: green;">Sincronização 100% Concluída!</strong><br><br>' +
+                                         '📥 <b>Importados Novinhos:</b> ' + res.data.imported_posts + ' posts e ' + res.data.imported_media + ' fotos.<br>' +
+                                         '🛡️ <b>Já Existiam (Preservados):</b> ' + res.data.ignored_posts + ' posts e ' + res.data.ignored_media + ' fotos.<br>' +
+                                         '<span style="font-size:12px; color:#718096">🧹 Arquivos de lixo apagados com sucesso!</span>');
+                                btn.html('<span class="dashicons dashicons-saved"></span> Importação Finalizada!').prop('disabled', false).css('background', 'green');
+                                $('#sync_file').val('');
+                                $('#file-name-display').hide().html('');
+                            }
+                        } else {
+                            status.html('❌ Erro no lote DB: ' + res.data);
+                            btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> Tentar Novamente');
+                        }
+                    },
+                    error: function() {
+                        status.html('❌ Timeout/Erro no lote banco. Servidor demorou demais.');
+                        btn.prop('disabled', false).html('<span class="dashicons dashicons-warning"></span> Clique aqui para continuar parou');
+                    }
+                });
+            }
+
+            // FASE 1: Botão Tradicional (Upload / Setup)
             $('#btn-run-import').on('click', function() {
                 var fileInput = $('#sync_file')[0];
                 var btn = $(this);
@@ -313,78 +695,128 @@ class BKSync {
                     alert('Por favor, selecione um arquivo .zip para importar.');
                     return;
                 }
-
                 var file = fileInput.files[0];
-                if (file.type !== 'application/zip' && file.type !== 'application/x-zip-compressed' && !file.name.endsWith('.zip')) {
-                    alert('O arquivo deve ser um pacote .zip gerado pelo BKSync.');
-                    return;
-                }
 
                 var formData = new FormData();
-                formData.append('action', 'bksync_import_data');
+                formData.append('action', 'bksync_import_setup_ajax');
                 formData.append('nonce', '<?php echo wp_create_nonce("bksync_nonce"); ?>');
+                formData.append('type', 'upload');
                 formData.append('sync_zip', file);
 
-                btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Extraindo e Injetando...');
-                status.html('<span style="color:#F0A528">Processando importação. Não feche a página...</span>');
+                btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Lendo Arquivo...');
+                status.html('<span style="color:#4a5568">Subindo o ZIP e construindo Sessão. Aguarde...</span>');
 
                 $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    url: ajaxurl, type: 'POST', data: formData, processData: false, contentType: false,
                     success: function(res) {
                         if (res.success) {
-                            var hw = '✅ <strong style="color: green;">Sincronização Concluída!</strong><br><br>' +
-                                     '📥 <b>Importados do Servidor Antigo:</b> ' + res.data.imported_posts + ' posts e ' + res.data.imported_media + ' fotos.<br>' +
-                                     '🛡️ <b>Anti-Duplicidade (Já existiam e foram ignorados):</b> ' + res.data.ignored_posts + ' posts e ' + res.data.ignored_media + ' fotos.';
-                            status.html(hw);
-                            btn.html('<span class="dashicons dashicons-upload"></span> Injetar Sincronização');
-                            // Limpa o form
-                            $('#sync_file').val('');
+                            importSessionId = res.data.session_id;
+                            importTotalMedia = res.data.total_media;
+                            importTotalPosts = res.data.total_posts;
+                            importTotalFiles = res.data.total_files;
+                            // Redireciona para extração de pacotes
+                            processExtractChunk(btn, status);
                         } else {
-                            status.html('❌ Erro: ' + res.data);
+                            status.html('❌ Erro no Setup: ' + res.data);
                             btn.prop('disabled', false).html('<span class="dashicons dashicons-upload"></span> Tentar Novamente');
                         }
                     },
                     error: function() {
-                        status.html('❌ Erro de conexão com o servidor durante o upload.');
+                        status.html('❌ Falha monstruosa (O ZIP pode ter estourado o limite do PHP de envio). Tente usar o Bypass Local!');
                         btn.prop('disabled', false).html('<span class="dashicons dashicons-upload"></span> Tentar Novamente');
                     }
                 });
             });
 
-            // Lógica Bypass Local
+            // FASE 1: Botão Bypass Local (Setup)
             $('#btn-run-local-import').on('click', function() {
                 var btn = $(this);
                 var status = $('#local-import-status');
 
                 btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Lendo Disco...');
-                status.html('<span style="color:#2d3748">Escaneando diretório /import/...</span>');
+                status.html('<span style="color:#2d3748">Encontrando ZIP no pendrive e construindo sessão...</span>');
 
                 $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'bksync_import_local_data',
-                        nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>'
-                    },
+                    url: ajaxurl, type: 'POST',
+                    data: { action: 'bksync_import_setup_ajax', nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>', type: 'local' },
                     success: function(res) {
                         if (res.success) {
-                            status.html('✅ <strong style="color: green;">Injeção Concluída!</strong> Importados ' + res.data.imported_posts + ' posts e ' + res.data.imported_media + ' mídias. O arquivo Zip lido foi arquivado como .bkp por segurança.');
-                            btn.html('<span class="dashicons dashicons-saved"></span> Processado com Sucesso');
+                            importSessionId = res.data.session_id;
+                            importTotalMedia = res.data.total_media;
+                            importTotalPosts = res.data.total_posts;
+                            importTotalFiles = res.data.total_files;
+                            // Redireciona para extração de pacotes
+                            processExtractChunk(btn, status);
                         } else {
                             status.html('❌ ' + res.data);
                             btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> Tentar Novamente');
                         }
                     },
                     error: function() {
-                        status.html('❌ Falha fatal. O PHP pode ter derrubado o processo caso estoure Memória ram.');
+                        status.html('❌ Falha fatal ao tentar ler o pendrive do servidor.');
                         btn.prop('disabled', false).html('<span class="dashicons dashicons-update"></span> Tentar Novamente');
                     }
                 });
             });
+            // --- FIM IMPORTAÇÃO COM PROGRESSO REALTIME ---
+            
+            // ==========================================
+            // ABA FERRAMENTAS: Auto-Healer Media Fixer
+            // ==========================================
+            $('#btn-run-healer').on('click', function() {
+                var btn = $(this);
+                var container = $('#healer-status-container');
+                var statusText = $('#healer-status-text');
+                var progressBar = $('#healer-progress-bar');
+                
+                if (!confirm("Deseja rastrear o Banco de Dados inteiro por mídias sem formato e curá-las? Lembre-se de não fechar essa aba enquanto o processo não terminar.")) return;
+                
+                btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Curando Mídias... Aguarde');
+                container.slideDown();
+                progressBar.css('width', '5%').css('background', '#F0A528');
+                statusText.html('Iniciando rastreamento de quadrados brancos no Banco de Dados...');
+                
+                processHealerChunk(btn, statusText, progressBar, 0, 0, 0);
+            });
+            
+            function processHealerChunk(btn, statusText, progressBar, offset, totalHealed, totalScanned) {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'bksync_heal_media_ajax',
+                        nonce: '<?php echo wp_create_nonce("bksync_nonce"); ?>',
+                        offset: offset
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            if (res.data.status === 'processing') {
+                                totalHealed += res.data.healed_in_this_chunk;
+                                totalScanned += res.data.scanned_in_this_chunk;
+                                
+                                // Simulating progress based on scanned batches
+                                var pb_width = 10 + (totalScanned % 100);
+                                progressBar.css('width', pb_width + '%');
+                                statusText.html('<span style="color:#F0A528;">⏳ Escaneando biblioteca (' + totalScanned + ' analisadas).<br>🛠️ Encontradas e Curadas: <b>' + totalHealed + '</b> mídias zumbis.</span>');
+                                
+                                processHealerChunk(btn, statusText, progressBar, res.data.offset, totalHealed, totalScanned);
+                            } else if (res.data.status === 'completed') {
+                                progressBar.css('width', '100%').css('background', 'green');
+                                statusText.html('✅ <strong style="color: green;">Escaneamento Concluído!</strong><br>O Healer varreu a biblioteca e aplicou reconstrução em <b>' + totalHealed + '</b> imagens que estavam sem face!');
+                                btn.html('<span class="dashicons dashicons-saved"></span> Biblioteca 100% Curada!').prop('disabled', false).css('background', 'green');
+                            }
+                        } else {
+                            statusText.html('<span style="color:red;">❌ Erro de Cura: ' + res.data + '</span>');
+                            btn.prop('disabled', false).html('<span class="dashicons dashicons-heart"></span> Tentar Novamente');
+                        }
+                    },
+                    error: function() {
+                        statusText.html('<span style="color:red;">❌ Timeout/Erro durante o lote de cura. Talvez a imagem estivesse muito pesada.</span>');
+                        btn.prop('disabled', false).html('<span class="dashicons dashicons-warning"></span> Continuar Cura de Onde Parou');
+                    }
+                });
+            }
+
         });
         </script>
         <style>
@@ -396,6 +828,62 @@ class BKSync {
 }
 
 new BKSync();
+
+// ----------------------------------------------------
+// AJAX SMART CHUNKS (Análise do Banco Mês a Mês)
+// ----------------------------------------------------
+add_action( 'wp_ajax_bksync_analyze_chunks_ajax', 'bksync_handle_analyze_chunks_ajax' );
+function bksync_handle_analyze_chunks_ajax() {
+    check_ajax_referer( 'bksync_nonce', 'nonce' );
+    if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Permissão negada.' );
+
+    global $wpdb;
+
+    // Consulta matadora: Agrupa Postagens e Mídias (Fotos) criadas por Ano e Mês, contando-as.
+    $query = "
+        SELECT 
+            YEAR(post_date) as yr, 
+            MONTH(post_date) as mn, 
+            COUNT(ID) as total_items
+        FROM {$wpdb->posts}
+        WHERE post_type IN ('post', 'attachment')
+          AND post_status IN ('publish', 'inherit')
+        GROUP BY yr, mn
+        ORDER BY yr DESC, mn DESC
+    ";
+
+    $results = $wpdb->get_results($query);
+    $chunks = array();
+
+    $meses_pt = array(
+        1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
+        5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
+        9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
+    );
+
+    foreach ($results as $row) {
+        if ($row->yr <= 0) continue; // Pula datas quebradas
+
+        $yr = str_pad($row->yr, 4, '0', STR_PAD_LEFT);
+        $mn = str_pad($row->mn, 2, '0', STR_PAD_LEFT);
+        
+        $mes_nome = isset($meses_pt[(int)$row->mn]) ? $meses_pt[(int)$row->mn] : $mn;
+
+        // Calcula primeiro e último dia do mês
+        $first_day = "{$yr}-{$mn}-01";
+        $last_day  = date("Y-m-t", strtotime($first_day));
+
+        $chunks[] = array(
+            'year_month' => "{$yr}-{$mn}",
+            'label' => "{$mes_nome} {$yr}",
+            'count' => $row->total_items,
+            'first_day' => $first_day,
+            'last_day' => $last_day
+        );
+    }
+
+    wp_send_json_success($chunks);
+}
 
 // ----------------------------------------------------
 // AJAX EXPORTAÇÃO SELETIVA
@@ -504,13 +992,17 @@ function bksync_handle_export_ajax() {
     $bksync_dir = $upload_dir['basedir'] . '/bksync_exports';
     if (!file_exists($bksync_dir)) {
         wp_mkdir_p($bksync_dir);
-        // Security blocks
+        // Security blocks (Prevent PHP execution and directory listing, but allow ZIP downloads)
         file_put_contents($bksync_dir . '/index.php', '<?php // Silence is golden.');
-        file_put_contents($bksync_dir . '/.htaccess', 'Deny from all');
+        $htaccess = "Options -Indexes\n<FilesMatch \"\.(?i:php|phtml|sh|cgi|py|pl|inc)$\">\n    <IfModule mod_authz_core.c>\n        Require all denied\n    </IfModule>\n    <IfModule !mod_authz_core.c>\n        Deny from all\n    </IfModule>\n</FilesMatch>";
+        file_put_contents($bksync_dir . '/.htaccess', $htaccess);
     }
-    
+    $months_label = isset($_POST['months_label']) ? sanitize_text_field($_POST['months_label']) : '';
+
     // Nome do arquivo
-    $filename = 'bksync-export-' . str_replace('-', '', $start_date) . '-' . str_replace('-', '', $end_date) . '-' . time() . '.zip';
+    $file_id = empty($months_label) ? str_replace('-', '', $start_date) . '-' . str_replace('-', '', $end_date) : $months_label;
+    $filename = 'bksync-export-' . $file_id . '-' . time() . '.zip';
+    
     $zip_path = $bksync_dir . '/' . $filename;
     $zip_url  = $upload_dir['baseurl'] . '/bksync_exports/' . $filename;
 
@@ -543,77 +1035,122 @@ function bksync_handle_export_ajax() {
 }
 
 // ----------------------------------------------------
-// AJAX IMPORTAÇÃO SELETIVA
+// AJAX IMPORTAÇÃO SELETIVA (SETUP PHASE)
 // ----------------------------------------------------
-add_action( 'wp_ajax_bksync_import_data', 'bksync_handle_import_ajax' );
-function bksync_handle_import_ajax() {
+add_action( 'wp_ajax_bksync_import_setup_ajax', 'bksync_handle_import_setup_ajax' );
+function bksync_handle_import_setup_ajax() {
     check_ajax_referer( 'bksync_nonce', 'nonce' );
     if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Permissão negada.' );
 
-    if ( empty( $_FILES['sync_zip'] ) || $_FILES['sync_zip']['error'] !== UPLOAD_ERR_OK ) {
-        wp_send_json_error( 'Nenhum arquivo enviado ou erro no upload.' );
+    $type = isset($_POST['type']) ? sanitize_text_field($_POST['type']) : 'upload';
+    $import_dir = plugin_dir_path( __FILE__ ) . 'import';
+    if ( ! file_exists( $import_dir ) ) wp_mkdir_p( $import_dir );
+
+    if ($type === 'upload') {
+        if ( empty( $_FILES['sync_zip'] ) || $_FILES['sync_zip']['error'] !== UPLOAD_ERR_OK ) {
+            wp_send_json_error( 'Nenhum arquivo enviado ou erro no upload.' );
+        }
+        $zip_file = trailingslashit($import_dir) . 'sys_upload_' . time() . '.zip';
+        move_uploaded_file($_FILES['sync_zip']['tmp_name'], $zip_file);
+    } else {
+        // Bypass Local
+        $files = scandir( $import_dir );
+        foreach ($files as $f) {
+            if ( strtolower(pathinfo( $f, PATHINFO_EXTENSION )) === 'zip' && strpos($f, 'sys_upload_') === false ) {
+                $zip_file = trailingslashit($import_dir) . $f;
+                // Renomeia na hora pra evitar execuções repetidas
+                $new_zip_file = $zip_file . '.sys';
+                rename($zip_file, $new_zip_file);
+                $zip_file = $new_zip_file;
+                break;
+            }
+        }
+        if ( empty($zip_file) || ! file_exists($zip_file) ) {
+            wp_send_json_error( "Nenhum arquivo .zip (novo) encontrado na pasta import/." );
+        }
     }
 
-    $uploaded_file = $_FILES['sync_zip']['tmp_name'];
-
-    if ( ! class_exists( 'ZipArchive' ) ) {
-        wp_send_json_error( 'A extensão ZipArchive não está instalada no PHP.' );
-    }
+    if ( ! class_exists( 'ZipArchive' ) ) wp_send_json_error( 'Extensão ZipArchive não instalada.' );
 
     $zip = new ZipArchive();
-    if ( $zip->open( $uploaded_file ) !== true ) {
-        wp_send_json_error( 'Falha ao abrir o arquivo ZIP fornecido.' );
-    }
+    if ( $zip->open( $zip_file ) !== true ) wp_send_json_error( 'Falha ao abrir .zip. O arquivo pode estar corrompido.' );
 
-    // 1. Ler o data.json
     $json_content = $zip->getFromName( 'data.json' );
-    if ( ! $json_content ) {
-        $zip->close();
-        wp_send_json_error( 'Arquivo data.json não encontrado dentro do pacote ZIP.' );
-    }
+    if ( ! $json_content ) { $zip->close(); wp_send_json_error( 'data.json não encontrado dentro do ZIP.' ); }
 
     $data = json_decode( $json_content, true );
-    if ( json_last_error() !== JSON_ERROR_NONE ) {
-        $zip->close();
-        wp_send_json_error( 'O arquivo data.json contém JSON inválido.' );
-    }
+    if ( json_last_error() !== JSON_ERROR_NONE ) { $zip->close(); wp_send_json_error( 'JSON quebrado ou inválido.' ); }
 
-    // Preparar caminhos base locais
+    $total_files = $zip->numFiles;
+    $zip->close();
+    
+    // SETUP STATE TRANSIENT
+    $total_media = empty($data['attachments']) ? 0 : count($data['attachments']);
+    $total_posts = empty($data['posts']) ? 0 : count($data['posts']);
+
+    $session_id = uniqid('bksync_');
+    $state = array(
+        'data'          => $data,
+        'zip_file'      => $zip_file,
+        'extract_ptr'   => 0,
+        'total_files'   => $total_files,
+        'pointers'      => array('media' => 0, 'posts' => 0),
+        'stats'         => array('imported_media' => 0, 'ignored_media' => 0, 'imported_posts' => 0, 'ignored_posts' => 0),
+        'old_to_new_ids'=> array()
+    );
+
+    set_transient( $session_id, $state, HOUR_IN_SECONDS * 2 );
+
+    wp_send_json_success( array(
+        'session_id'  => $session_id,
+        'total_media' => $total_media,
+        'total_posts' => $total_posts,
+        'total_files' => $total_files
+    ) );
+}
+
+// ----------------------------------------------------
+// AJAX DESCOMPACTAÇÃO SELETIVA DE ARQUIVOS DA MEDIA (CHUNK EXTRACT)
+// ----------------------------------------------------
+add_action( 'wp_ajax_bksync_extract_chunk_ajax', 'bksync_handle_extract_chunk_ajax' );
+function bksync_handle_extract_chunk_ajax() {
+    check_ajax_referer( 'bksync_nonce', 'nonce' );
+    if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Permissão negada.' );
+
+    $session_id = isset($_POST['session_id']) ? sanitize_text_field($_POST['session_id']) : '';
+    $state = get_transient($session_id);
+
+    if (!$state) wp_send_json_error('Sessão expirou ou arquivo pesado demais estourou a memória.');
+
+    $zip_file = $state['zip_file'];
+    $zip = new ZipArchive();
+    
+    if ( $zip->open( $zip_file ) !== true ) wp_send_json_error('Falha ao reabrir o .zip do disco local.');
+
     $upload_dir = wp_get_upload_dir();
-    $basedir    = $upload_dir['basedir'];
+    $basedir    = trailingslashit($upload_dir['basedir']);
 
-    // 2. Extração Física das imagens e SECURITY SCAN (Anti-Hacker)
-    // O Burp Suite pode injetar Web Shells .php no arquivo zip de media
-    for ( $i = 0; $i < $zip->numFiles; $i++ ) {
+    // Extrai 200 arquivos por vez
+    $chunk_size = 200;
+    $start = $state['extract_ptr'];
+    $end = min($start + $chunk_size, $state['total_files']);
+
+    for ( $i = $start; $i < $end; $i++ ) {
         $filename = $zip->getNameIndex( $i );
         
-        // Block PHP/Shell uploads disguised as valid Zips
         $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
-        $blocked_exts = array('php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phar', 'inc', 'sh', 'cgi', 'pl', 'py');
-        if ( in_array( $ext, $blocked_exts ) ) {
-            $zip->close();
-            wp_send_json_error( 'Ameaça Detectada: Arquivo contido no pacote possui extensão executável ou perigosa (.' . $ext . '). A Sincronização foi abortada para garantir a segurança do servidor.' );
-        }
-
-        // Anti Path Traversal Protection
-        if ( strpos( $filename, '../' ) !== false || strpos( $filename, '..\\' ) !== false ) {
-            $zip->close();
-            wp_send_json_error( 'Ameaça Detectada: Tentativa de Path Traversal (../). Hack abortado.' );
-        }
+        $blocked_exts = array('php', 'phtml', 'sh', 'cgi', 'pl', 'py', 'inc');
+        if ( in_array( $ext, $blocked_exts ) ) continue; 
+        if ( strpos( $filename, '../' ) !== false ) continue; 
 
         if ( strpos( $filename, 'media/' ) === 0 ) {
-            $relative_path = substr( $filename, 6 ); // Remove "media/" do inicio da string do ZIP
-            if ( empty( $relative_path ) || substr( $relative_path, -1 ) === '/' ) continue; // Pula os parent dirs
-
-            $target_file = trailingslashit( $basedir ) . $relative_path;
+            $relative_path = substr( $filename, 6 ); 
+            if ( empty( $relative_path ) || substr( $relative_path, -1 ) === '/' ) continue;
             
-            // Cria a árvore de diretórios físico caso falte
+            $target_file = $basedir . $relative_path;
             $target_dir = dirname( $target_file );
-            if ( ! file_exists( $target_dir ) ) {
-                wp_mkdir_p( $target_dir );
-            }
+            if ( ! file_exists( $target_dir ) ) wp_mkdir_p( $target_dir );
 
-            // Lê do Zip e Grava no HD
             $fp = $zip->getStream( $filename );
             if ( ! $fp ) continue;
             
@@ -629,342 +1166,250 @@ function bksync_handle_import_ajax() {
     }
     $zip->close();
 
-    // 3. Processar Mídias no Banco (Attachments)
-    require_once( ABSPATH . 'wp-admin/includes/image.php' );
-    require_once( ABSPATH . 'wp-admin/includes/file.php' );
-    require_once( ABSPATH . 'wp-admin/includes/media.php' );
+    $state['extract_ptr'] = $end;
+    set_transient( $session_id, $state, HOUR_IN_SECONDS * 2 );
 
-    $old_to_new_ids = array();
-    $imported_media = 0;
-    $ignored_media = 0;
-
-    if ( ! empty( $data['attachments'] ) ) {
-        foreach ( $data['attachments'] as $att ) {
-            $old_id = $att['id'];
-            $rel_path = $att['relative_path'];
-            $target_file = trailingslashit( $basedir ) . $rel_path;
-            
-            // Verifica se a mídia já existe no banco usando o post_name exato da mídia
-            $existing_query = new WP_Query( array(
-                'post_type'  => 'attachment',
-                'post_status'=> 'inherit',
-                'name'       => $att['post_name'],
-                'posts_per_page' => 1
-            ) );
-
-            if ( $existing_query->have_posts() ) {
-                // Se já existe, pega o ID local dela para atualizar o cache de Mapeamento
-                $old_to_new_ids[ $old_id ] = $existing_query->posts[0]->ID;
-                $ignored_media++;
-                continue;
-            }
-
-            // Injeta a foto virgem no banco local
-            if ( file_exists( $target_file ) ) {
-                $attachment_info = array(
-                    'post_mime_type' => $att['mime_type'],
-                    'post_title'     => $att['post_title'],
-                    'post_content'   => $att['post_content'],
-                    'post_excerpt'   => $att['post_excerpt'],
-                    'post_status'    => 'inherit',
-                    'post_name'      => $att['post_name'],
-                    'post_date'      => $att['post_date']
-                );
-                $attach_id = wp_insert_attachment( $attachment_info, $target_file );
-                if ( ! is_wp_error( $attach_id ) ) {
-
-                    $old_to_new_ids[ $old_id ] = $attach_id;
-                    $attach_data = wp_generate_attachment_metadata( $attach_id, $target_file );
-                    wp_update_attachment_metadata( $attach_id, $attach_data );
-                    
-                    // Se a imagem no site velho tinha Alt Text preenchido, recupera
-                    if (isset($att['meta']['_wp_attachment_image_alt'])) {
-                        update_post_meta($attach_id, '_wp_attachment_image_alt', $att['meta']['_wp_attachment_image_alt'][0]);
-                    }
-                    $imported_media++;
-                }
-            }
+    if ($end >= $state['total_files']) {
+        // Acabou extração. Delete temporário de upload se foi upload.
+        if (strpos($zip_file, 'sys_upload_') !== false) {
+            @unlink($zip_file);
+        } else {
+            rename($zip_file, str_replace('.sys', '.bkp', $zip_file));
         }
+        wp_send_json_success(array('status' => 'completed', 'processed' => $end));
+    } else {
+        wp_send_json_success(array('status' => 'processing', 'processed' => $end));
     }
-
-    $imported_posts = 0;
-    $ignored_posts = 0;
-
-    // 4. Injeção Direta dos Posts
-    if ( ! empty( $data['posts'] ) ) {
-        foreach ( $data['posts'] as $p ) {
-            // Verifica se o post velho já existe no servidor novo pelo slug (url) amigável
-            $existing_post_query = new WP_Query( array(
-                'post_type'  => $p['post_type'],
-                'post_status'=> 'any',
-                'name'       => $p['post_name'],
-                'posts_per_page' => 1
-            ) );
-
-            $new_post_id = 0;
-
-            if ( $existing_post_query->have_posts() ) {
-                // Post já existe. Ignora inserção de objeto para não dar duplicate
-                $new_post_id = $existing_post_query->posts[0]->ID;
-                $ignored_posts++;
-            } else {
-                // Construção e Injeção cirúrgica do post
-                $post_info = array(
-                    'post_title'   => $p['post_title'],
-                    'post_content' => $p['post_content'],
-                    'post_excerpt' => $p['post_excerpt'],
-                    'post_status'  => $p['post_status'],
-                    'post_type'    => $p['post_type'],
-                    'post_name'    => $p['post_name'],
-                    'post_date'    => $p['post_date'],
-                    'post_author'  => get_current_user_id()
-                );
-                
-                $new_post_id = wp_insert_post( $post_info );
-                if ( ! is_wp_error( $new_post_id ) ) {
-                    $imported_posts++;
-                } else {
-                    $new_post_id = 0;
-                }
-            }
-
-            if ( $new_post_id ) {
-                // Define categorias e tags recriando-as caso não existam no servidor novo (true fallback native wp logic)
-                if ( ! empty( $p['categories'] ) ) {
-                    wp_set_object_terms( $new_post_id, $p['categories'], 'category', false );
-                }
-                if ( ! empty( $p['tags'] ) ) {
-                    wp_set_object_terms( $new_post_id, $p['tags'], 'post_tag', false );
-                }
-                
-                // Mapeia a ID da Imagem Destacada (o ID do JSON é diferente do ID nativo recém criado)
-                if ( ! empty( $p['thumbnail_id'] ) ) {
-                    $old_thumb_id = $p['thumbnail_id'];
-                    if ( isset( $old_to_new_ids[ $old_thumb_id ] ) ) {
-                        set_post_thumbnail( $new_post_id, $old_to_new_ids[ $old_thumb_id ] );
-                    }
-                }
-
-                // Despeja todo Custom Meta Box do editor e SEO antigo ignorando chaves pesadas editadas por locks
-                if ( ! empty( $p['meta'] ) ) {
-                    $ignore_meta = array('_edit_lock', '_edit_last', '_thumbnail_id', '_wp_old_slug', '_pingme', '_encloseme');
-                    foreach ($p['meta'] as $meta_key => $meta_values) {
-                        if ( in_array( $meta_key, $ignore_meta ) ) continue;
-                        delete_post_meta($new_post_id, $meta_key);
-                        foreach ($meta_values as $m_val) {
-                            add_post_meta($new_post_id, $meta_key, maybe_unserialize($m_val));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    wp_send_json_success( array(
-        'imported_posts' => $imported_posts,
-        'imported_media' => $imported_media,
-        'ignored_posts'  => $ignored_posts,
-        'ignored_media'  => $ignored_media
-    ) );
 }
 
 // ----------------------------------------------------
-// AJAX IMPORTAÇÃO LOCAL BYPASS
+// AJAX IMPORTAÇÃO SELETIVA (PROCESS CHUNK)
 // ----------------------------------------------------
-add_action( 'wp_ajax_bksync_import_local_data', 'bksync_handle_import_local_ajax' );
-function bksync_handle_import_local_ajax() {
+add_action( 'wp_ajax_bksync_import_chunk_ajax', 'bksync_handle_import_chunk_ajax' );
+function bksync_handle_import_chunk_ajax() {
     check_ajax_referer( 'bksync_nonce', 'nonce' );
     if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Permissão negada.' );
 
-    $import_dir = plugin_dir_path( __FILE__ ) . 'import';
-    
-    // Cria pasta de import automaticamente se não existir e protege
-    if ( ! file_exists( $import_dir ) ) {
-        wp_mkdir_p( $import_dir );
-        file_put_contents($import_dir . '/index.php', '<?php // Silence is golden.');
-        file_put_contents($import_dir . '/.htaccess', 'Deny from all');
-        wp_send_json_error( "A pasta 'import' não existia e acabou de ser criada. Por favor, jogue seu arquivo .zip nela (" . $import_dir . ") e tente de novo." );
+    $session_id = isset($_POST['session_id']) ? sanitize_text_field($_POST['session_id']) : '';
+    $state = get_transient($session_id);
+
+    if (!$state) {
+        wp_send_json_error('Sessão expirou ou arquivo pesado demais estourou a memória.');
     }
-
-    // Procura o 1º ZIP disponível na pasta import/
-    $files = scandir( $import_dir );
-    $zip_file = '';
-    
-    foreach ($files as $f) {
-        if ( pathinfo( $f, PATHINFO_EXTENSION ) === 'zip' ) {
-            $zip_file = trailingslashit($import_dir) . $f;
-            break;
-        }
-    }
-
-    if ( empty($zip_file) || ! file_exists($zip_file) ) {
-        wp_send_json_error( "Nenhum arquivo .zip encontrado na pasta /bksync/import/. Garanta que o upload local foi concluído." );
-    }
-
-    // Se encontrou, dispara o Kernel de Injeção
-    $result = bksync_core_import_archive( $zip_file );
-    
-    if ( is_wp_error( $result ) ) {
-        wp_send_json_error( $result->get_error_message() );
-    }
-
-    // Após o sucesso absoluto, renomeia o arquivo para .pak (.bkp) para que ele não rescaneará no próximo clique
-    rename( $zip_file, $zip_file . '.bkp' );
-
-    wp_send_json_success( $result );
-}
-
-// ----------------------------------------------------
-// KERNEL REUTILIZÁVEL DE EXTRAÇÃO E INJEÇÃO (Evitando duplicação)
-// ----------------------------------------------------
-function bksync_core_import_archive( $file_path ) {
-    if ( ! class_exists( 'ZipArchive' ) ) {
-        return new WP_Error('no_zip', 'ZipArchive não instalado.');
-    }
-
-    $zip = new ZipArchive();
-    if ( $zip->open( $file_path ) !== true ) {
-        return new WP_Error('bad_zip', 'Zipe corrompido ou inacessível.');
-    }
-
-    $json_content = $zip->getFromName( 'data.json' );
-    if ( ! $json_content ) {
-        $zip->close();
-        return new WP_Error('no_json', 'Arquivo data.json não encontrado no zip.');
-    }
-
-    $data = json_decode( $json_content, true );
-    if ( json_last_error() !== JSON_ERROR_NONE ) {
-        $zip->close();
-        return new WP_Error('bad_json', 'JSON quebrado.');
-    }
-
-    $upload_dir = wp_get_upload_dir();
-    $basedir    = $upload_dir['basedir'];
-
-    for ( $i = 0; $i < $zip->numFiles; $i++ ) {
-        $filename = $zip->getNameIndex( $i );
-        
-        $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
-        $blocked_exts = array('php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phar', 'inc', 'sh', 'cgi', 'pl', 'py');
-        if ( in_array( $ext, $blocked_exts ) ) {
-            $zip->close();
-            return new WP_Error('hacked', 'Detectado arquivo perigoso bloqueado: ' . $ext);
-        }
-
-        if ( strpos( $filename, '../' ) !== false || strpos( $filename, '..\\' ) !== false ) {
-            $zip->close();
-            return new WP_Error('hacked', 'Tentativa de Path Traversal bloqueada.');
-        }
-
-        if ( strpos( $filename, 'media/' ) === 0 ) {
-            $relative_path = substr( $filename, 6 ); 
-            if ( empty( $relative_path ) || substr( $relative_path, -1 ) === '/' ) continue;
-            
-            $target_file = trailingslashit( $basedir ) . $relative_path;
-            $target_dir = dirname( $target_file );
-            if ( ! file_exists( $target_dir ) ) wp_mkdir_p( $target_dir );
-
-            $fp = $zip->getStream( $filename );
-            if ( ! $fp ) continue;
-            
-            $out = fopen( $target_file, 'wb' );
-            if ( $out ) {
-                while ( ! feof( $fp ) ) fwrite( $out, fread( $fp, 8192 ) );
-                fclose( $out );
-            }
-            fclose( $fp );
-        }
-    }
-    $zip->close();
 
     require_once( ABSPATH . 'wp-admin/includes/image.php' );
     require_once( ABSPATH . 'wp-admin/includes/file.php' );
     require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
-    $old_to_new_ids = array();
-    $imported_media = 0; $ignored_media = 0;
+    $upload_dir = wp_get_upload_dir();
+    $basedir    = trailingslashit($upload_dir['basedir']);
 
-    if ( ! empty( $data['attachments'] ) ) {
-        foreach ( $data['attachments'] as $att ) {
-            $old_id = $att['id'];
-            $rel_path = $att['relative_path'];
-            $target_file = trailingslashit( $basedir ) . $rel_path;
+    // CHUNK SIZE Seguro de Posts por vez. O Bypass de Metadata agora nos permite injetar 30 tranquilamente.
+    // Mas pra segurança absoluta vamos com 15
+    $chunk_size = 15; 
+    $processed  = 0;
+    
+    $total_media = empty($state['data']['attachments']) ? 0 : count($state['data']['attachments']);
+    $total_posts = empty($state['data']['posts']) ? 0 : count($state['data']['posts']);
+
+    // Mídias
+    while ( $processed < $chunk_size && $state['pointers']['media'] < $total_media ) {
+        $att = $state['data']['attachments'][ $state['pointers']['media'] ];
+        $old_id = $att['id'];
+        $rel_path = $att['relative_path'];
+        $target_file = $basedir . $rel_path;
+        
+        $existing_query = new WP_Query( array(
+            'post_type' => 'attachment', 'post_status' => 'inherit', 'name' => $att['post_name'], 'posts_per_page' => 1
+        ) );
+
+        if ( $existing_query->have_posts() ) {
+            $existing_id = $existing_query->posts[0]->ID;
+            $state['old_to_new_ids'][ $old_id ] = $existing_id;
             
-            $existing_query = new WP_Query( array(
-                'post_type' => 'attachment', 'post_status' => 'inherit', 'name' => $att['post_name'], 'posts_per_page' => 1
-            ) );
-
-            if ( $existing_query->have_posts() ) {
-                $old_to_new_ids[ $old_id ] = $existing_query->posts[0]->ID;
-                $ignored_media++;
-                continue;
+            // SELF-HEALING: Se a mídia for um "Quadrado Branco" derivado do erro 504 (Timeout anterior),
+            // ela vai existir no post, mas não vai ter metadado. Nós curamos ela aqui!
+            $current_meta = wp_get_attachment_metadata($existing_id);
+            if (empty($current_meta) && !empty($att['meta'])) {
+                $ignore_meta = array('_edit_lock', '_edit_last', '_thumbnail_id', '_wp_old_slug', '_wp_attached_file');
+                foreach ($att['meta'] as $meta_key => $meta_values) {
+                    if ( in_array( $meta_key, $ignore_meta ) ) continue;
+                    foreach ($meta_values as $m_val) {
+                        add_post_meta($existing_id, $meta_key, maybe_unserialize($m_val));
+                    }
+                }
+                update_attached_file( $existing_id, $target_file );
             }
-
+            
+            $state['stats']['ignored_media']++;
+        } else {
             if ( file_exists( $target_file ) ) {
                 $attachment_info = array(
-                    'post_mime_type' => $att['mime_type'],
-                    'post_title'     => $att['post_title'],
-                    'post_content'   => $att['post_content'],
-                    'post_excerpt'   => $att['post_excerpt'],
-                    'post_status'    => 'inherit',
-                    'post_name'      => $att['post_name'],
-                    'post_date'      => $att['post_date']
+                    'post_mime_type' => $att['mime_type'], 'post_title' => $att['post_title'],
+                    'post_content' => $att['post_content'], 'post_excerpt' => $att['post_excerpt'],
+                    'post_status' => 'inherit', 'post_name' => $att['post_name'], 'post_date' => $att['post_date']
                 );
                 $attach_id = wp_insert_attachment( $attachment_info, $target_file );
                 if ( ! is_wp_error( $attach_id ) ) {
-                    $old_to_new_ids[ $old_id ] = $attach_id;
-                    $attach_data = wp_generate_attachment_metadata( $attach_id, $target_file );
-                    wp_update_attachment_metadata( $attach_id, $attach_data );
-                    if (isset($att['meta']['_wp_attachment_image_alt'])) {
-                        update_post_meta($attach_id, '_wp_attachment_image_alt', $att['meta']['_wp_attachment_image_alt'][0]);
+                    $state['old_to_new_ids'][ $old_id ] = $attach_id;
+                    
+                    // EXTREME PERFORMANCE BYPASS: O antigo WP forçava o wp_generate_attachment_metadata() aqui.
+                    // Isso fazia o Servidor de Produção suar frio recriando 6 miniaturas pra cada imagem do lote e estourando o Timeout (504).
+                    // Como o nosso ZIP já trouxe do Export as miniaturas físicas prontas na nuvem, nós apenas repassamos os Metadados!
+                    if ( ! empty( $att['meta'] ) ) {
+                        $ignore_meta = array('_edit_lock', '_edit_last', '_thumbnail_id', '_wp_old_slug', '_wp_attached_file');
+                        foreach ($att['meta'] as $meta_key => $meta_values) {
+                            if ( in_array( $meta_key, $ignore_meta ) ) continue;
+                            foreach ($meta_values as $m_val) {
+                                add_post_meta($attach_id, $meta_key, maybe_unserialize($m_val));
+                            }
+                        }
                     }
-                    $imported_media++;
+                    
+                    // Após espelhar toda a inteligência e Image Alts, apenas conectamos a base atual.
+                    update_attached_file( $attach_id, $target_file );
+                    $state['stats']['imported_media']++;
                 }
             }
         }
+        $state['pointers']['media']++;
+        $processed++;
     }
 
-    $imported_posts = 0; $ignored_posts = 0;
-    if ( ! empty( $data['posts'] ) ) {
-        foreach ( $data['posts'] as $p ) {
-            $existing_post_query = new WP_Query( array(
-                'post_type' => $p['post_type'], 'post_status' => 'any', 'name' => $p['post_name'], 'posts_per_page' => 1
-            ) );
-            $new_post_id = 0;
+    // Posts
+    while ( $processed < $chunk_size && $state['pointers']['posts'] < $total_posts ) {
+        $p = $state['data']['posts'][ $state['pointers']['posts'] ];
+        
+        $existing_post_query = new WP_Query( array(
+            'post_type' => $p['post_type'], 'post_status' => 'any', 'name' => $p['post_name'], 'posts_per_page' => 1
+        ) );
+        $new_post_id = 0;
 
-            if ( $existing_post_query->have_posts() ) {
-                $new_post_id = $existing_post_query->posts[0]->ID;
-                $ignored_posts++;
-            } else {
-                $post_info = array(
-                    'post_title'   => $p['post_title'], 'post_content' => $p['post_content'],
-                    'post_excerpt' => $p['post_excerpt'], 'post_status'  => $p['post_status'],
-                    'post_type'    => $p['post_type'], 'post_name'    => $p['post_name'],
-                    'post_date'    => $p['post_date'], 'post_author'  => get_current_user_id()
-                );
-                $new_post_id = wp_insert_post( $post_info );
-                if ( ! is_wp_error( $new_post_id ) ) {
-                    $imported_posts++;
-                } else $new_post_id = 0;
+        if ( $existing_post_query->have_posts() ) {
+            $new_post_id = $existing_post_query->posts[0]->ID;
+            $state['stats']['ignored_posts']++;
+        } else {
+            $post_info = array(
+                'post_title' => $p['post_title'], 'post_content' => $p['post_content'],
+                'post_excerpt' => $p['post_excerpt'], 'post_status'  => $p['post_status'],
+                'post_type' => $p['post_type'], 'post_name' => $p['post_name'],
+                'post_date' => $p['post_date'], 'post_author' => get_current_user_id()
+            );
+            $new_post_id = wp_insert_post( $post_info );
+            if ( ! is_wp_error( $new_post_id ) ) {
+                $state['stats']['imported_posts']++;
+            } else $new_post_id = 0;
+        }
+
+        if ( $new_post_id ) {
+            if ( ! empty( $p['categories'] ) ) wp_set_object_terms( $new_post_id, $p['categories'], 'category', false );
+            if ( ! empty( $p['tags'] ) ) wp_set_object_terms( $new_post_id, $p['tags'], 'post_tag', false );
+            if ( ! empty( $p['thumbnail_id'] ) && isset( $state['old_to_new_ids'][ $p['thumbnail_id'] ] ) ) {
+                set_post_thumbnail( $new_post_id, $state['old_to_new_ids'][ $p['thumbnail_id'] ] );
             }
-
-            if ( $new_post_id ) {
-                if ( ! empty( $p['categories'] ) ) wp_set_object_terms( $new_post_id, $p['categories'], 'category', false );
-                if ( ! empty( $p['tags'] ) ) wp_set_object_terms( $new_post_id, $p['tags'], 'post_tag', false );
-                if ( ! empty( $p['thumbnail_id'] ) && isset( $old_to_new_ids[ $p['thumbnail_id'] ] ) ) {
-                    set_post_thumbnail( $new_post_id, $old_to_new_ids[ $p['thumbnail_id'] ] );
-                }
-                if ( ! empty( $p['meta'] ) ) {
-                    $ignore_meta = array('_edit_lock', '_edit_last', '_thumbnail_id', '_wp_old_slug');
-                    foreach ($p['meta'] as $meta_key => $meta_values) {
-                        if ( in_array( $meta_key, $ignore_meta ) ) continue;
-                        delete_post_meta($new_post_id, $meta_key);
-                        foreach ($meta_values as $m_val) add_post_meta($new_post_id, $meta_key, maybe_unserialize($m_val));
-                    }
+            if ( ! empty( $p['meta'] ) ) {
+                $ignore_meta = array('_edit_lock', '_edit_last', '_thumbnail_id', '_wp_old_slug');
+                foreach ($p['meta'] as $meta_key => $meta_values) {
+                    if ( in_array( $meta_key, $ignore_meta ) ) continue;
+                    delete_post_meta($new_post_id, $meta_key);
+                    foreach ($meta_values as $m_val) add_post_meta($new_post_id, $meta_key, maybe_unserialize($m_val));
                 }
             }
         }
+        $state['pointers']['posts']++;
+        $processed++;
     }
-    return array('imported_posts' => $imported_posts, 'imported_media' => $imported_media, 'ignored_posts' => $ignored_posts, 'ignored_media' => $ignored_media);
+
+    set_transient( $session_id, $state, HOUR_IN_SECONDS * 2 );
+
+    if ( $state['pointers']['media'] >= $total_media && $state['pointers']['posts'] >= $total_posts ) {
+        // Acabou! Cleanup transient e termina.
+        delete_transient( $session_id );
+        wp_send_json_success(array(
+            'status' => 'completed',
+            'imported_posts' => $state['stats']['imported_posts'],
+            'imported_media' => $state['stats']['imported_media'],
+            'ignored_posts'  => $state['stats']['ignored_posts'],
+            'ignored_media'  => $state['stats']['ignored_media']
+        ));
+    } else {
+        // Continua rodando
+        wp_send_json_success(array(
+            'status' => 'processing',
+            'processed_media' => $state['pointers']['media'],
+            'processed_posts' => $state['pointers']['posts']
+        ));
+    }
+}
+
+// ==========================================
+// AJAX: Media Auto-Healer Fixer
+// ==========================================
+add_action('wp_ajax_bksync_heal_media_ajax', 'bksync_handle_heal_media_ajax');
+function bksync_handle_heal_media_ajax() {
+    check_ajax_referer('bksync_nonce', 'nonce');
+    if (!current_user_can('manage_options')) wp_send_json_error('Sem permissão');
+    
+    $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
+    
+    $args = array(
+        'post_type'      => 'attachment',
+        'post_status'    => 'inherit',
+        'posts_per_page' => 50, // Check 50 at a time
+        'offset'         => $offset,
+        'orderby'        => 'ID',
+        'order'          => 'DESC'
+    );
+    
+    $query = new WP_Query($args);
+    
+    if (!$query->have_posts()) {
+         wp_send_json_success(array('status' => 'completed'));
+    }
+    
+    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+    
+    $healed_count = 0;
+    $scanned_count = 0;
+    
+    foreach ($query->posts as $att) {
+        $scanned_count++;
+        
+        // Pula arquivos que não são imagem (como PDF, MP4 ou SVG)
+        if (strpos($att->post_mime_type, 'image/') !== 0 || $att->post_mime_type === 'image/svg+xml') {
+            continue;
+        }
+        
+        $meta = wp_get_attachment_metadata($att->ID);
+        $needs_healing = false;
+        
+        if (empty($meta) || !is_array($meta)) {
+            $needs_healing = true;
+        } else if (!isset($meta['sizes']) || empty($meta['sizes'])) {
+            $needs_healing = true;
+        }
+        
+        if ($needs_healing) {
+            $file = get_attached_file($att->ID);
+            if ($file && file_exists($file)) {
+                $attach_data = wp_generate_attachment_metadata( $att->ID, $file );
+                wp_update_attachment_metadata( $att->ID, $attach_data );
+                $healed_count++;
+            }
+            
+            // Limitador estrito: Gasta muita CPU, então depois de 3 curas a gente faz uma quebra limitando Server Timeout
+            if ($healed_count >= 3) {
+                break;
+            }
+        }
+    }
+    
+    $new_offset = $offset + $scanned_count;
+    
+    wp_send_json_success(array(
+        'status' => 'processing',
+        'offset' => $new_offset,
+        'healed_in_this_chunk' => $healed_count,
+        'scanned_in_this_chunk' => $scanned_count
+    ));
 }
